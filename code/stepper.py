@@ -1,7 +1,6 @@
 # stepper.py — NEMA 17 stepper motor control via DRV8825
 # ========================================================
-# Handles turret rotation with acceleration ramping and
-# gear ratio support.
+# Handles turret rotation with acceleration ramping.
 #
 # Test independently:
 #   from stepper import Stepper
@@ -23,8 +22,6 @@ class Stepper:
     
     Tracks absolute position in microsteps from the startup position.
     Supports acceleration ramping to prevent missed steps.
-    Gear ratio is handled in config — STEPS_PER_TURRET_REV already
-    accounts for it, so step counts here are always in turret-space.
     """
     
     def __init__(self):
