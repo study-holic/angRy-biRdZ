@@ -36,7 +36,7 @@ class Launcher:
         self.latch = Positional(config.LATCH_PIN)
         
         # Arm servo (360° continuous — cocks the arm)
-        self.arm = Continuous(config.ARM_PIN, gear_ratio=config.ARM_GEAR_RATIO)
+        self.arm = Continuous(config.ARM_PIN)
         
         # Magazine servo (positional — drops balls)
         self.magazine = Positional(config.MAGAZINE_PIN)
