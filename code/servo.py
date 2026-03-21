@@ -92,10 +92,9 @@ class Continuous:
         arm.stop()
     """
     
-    def __init__(self, pin, gear_ratio=1.0):
+    def __init__(self, pin):
         self.pwm = PWM(Pin(pin))
         self.pwm.freq(50)
-        self.gear_ratio = gear_ratio
         self.stop()
     
     def spin(self, speed, duration_ms):
@@ -108,7 +107,6 @@ class Continuous:
                    positive = pull arm back (cock)
                    negative = release arm forward
             duration_ms: how long to spin (controls how far arm moves)
-                         This is adjusted by gear_ratio automatically.
         """
         speed = max(-100, min(100, speed))
         
@@ -116,12 +114,8 @@ class Continuous:
         range_duty = (_MAX_DUTY - _MIN_DUTY) // 2
         duty = int(_CENTER_DUTY + (range_duty * speed / 100))
         
-        # Adjust duration for gear ratio
-        # Higher gear ratio = servo needs to spin longer for same arm movement
-        adjusted_duration = int(duration_ms * self.gear_ratio)
-        
         self.pwm.duty_u16(duty)
-        time.sleep_ms(adjusted_duration)
+        time.sleep_ms(duration_ms)
         self.stop()
     
     def spin_start(self, speed):
