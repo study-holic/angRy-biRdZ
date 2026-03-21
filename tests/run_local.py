@@ -20,7 +20,7 @@ import time
 
 # ── 1. Point imports at stubs/ ───────────────────────────────────────────────
 
-STUBS_DIR = os.path.join(os.path.dirname(__file__), "tests")
+STUBS_DIR = os.path.join(os.path.dirname(__file__), "testing")
 sys.path.insert(0, STUBS_DIR)
 
 # ── 2. Patch MicroPython-only time calls ─────────────────────────────────────
