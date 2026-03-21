@@ -348,7 +348,7 @@ All tuneable parameters live in `config.py`. The most commonly adjusted values d
 | Document | Contents |
 |----------|----------|
 | [`catapult_plan.md`](catapult_plan.md) | Full build guide: component explanations, power architecture, step-by-step wiring with test checkpoints, mechanical assembly, calibration walkthrough, day-by-day schedule |
-| [`test_log.md`](test_log.md) | 180-item checklist covering pre-build inventory, power setup, individual component tests, module integration, calibration data collection, competition simulation, and competition day prep |
+| [`test.md`](test_log.md) | 180-item checklist covering pre-build inventory, power setup, individual component tests, module integration, calibration data collection, competition simulation, and competition day prep |
 
 ---
 
