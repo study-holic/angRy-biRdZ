@@ -200,7 +200,6 @@ arm = Continuous(3)
 | 2.4.8 | Off command | `arm.off()` | Servo goes limp | ☐ | |
 | 2.4.9 | Determine cocking direction | Try +speed and -speed | Which direction pulls arm back? | ☐ | Cock direction: positive / negative |
 | 2.4.10 | No Pico brownout | Spin at full speed | Pico stays on, voltage >4.5V | ☐ | |
-| 2.4.11 | Gear ratio (if geared) | Spin 1s at speed 50 | Measure arm movement matches expected | ☐ | Gear ratio: ________ |
 
 ### 2.5 Stepper Motor — NEMA 17 via DRV8825 (stepper.py)
 
@@ -222,7 +221,7 @@ turret.enable()
 | 2.5.8 | Goto angle | `turret.goto_angle(90)` | Turret faces 90° | ☐ | |
 | 2.5.9 | Home | `turret.home()` | Returns to step 0 | ☐ | |
 | 2.5.10 | Acceleration (no missed steps) | `turret.move(1600)` with accel | Smooth ramp up/down, no stuttering | ☐ | |
-| 2.5.11 | Gear ratio check (if geared) | Full turret revolution | `steps_per_rev()` actually = 1 turret rev | ☐ | Adjust TURRET_GEAR_RATIO if not |
+| 2.5.11 | Full revolution accuracy | Mark start pos with tape, do full rev | Returns to exact same position | ☐ | Overshoot/undershoot: ________ |
 | 2.5.12 | Disable | `turret.disable()` | Motor shaft spins freely by hand | ☐ | |
 | 2.5.13 | No overheating | Run motor for 2 minutes | DRV8825 warm but not burning hot | ☐ | Approx temp: ________ |
 | 2.5.14 | Motor direction matches code | `turret.move(800)` | CW in real life = positive in code | ☐ | If reversed, swap motor coil wires |
@@ -397,8 +396,7 @@ run()
 | ARM_RELEASE_SPEED | |
 | ARM_COCK_DURATION_MIN | |
 | ARM_COCK_DURATION_MAX | |
-| ARM_GEAR_RATIO | |
-| TURRET_GEAR_RATIO | |
+| ARM_RELEASE_DURATION | |
 | BACKGROUND_THRESHOLD | |
 | CLOSE_MAX | |
 | MIDDLE_MAX | |
