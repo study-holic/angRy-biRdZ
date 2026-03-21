@@ -1,0 +1,7 @@
+{
+  "extraPaths": [
+    "testing"
+  ],
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "off"
+}
