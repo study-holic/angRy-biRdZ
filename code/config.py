@@ -37,11 +37,9 @@ i2c = I2C(0, sda=Pin(I2C_SDA), scl=Pin(I2C_SCL), freq=400_000)
 
 STEPPER_STEPS_PER_REV = 200      # native steps (1.8° per step)
 MICROSTEP_MODE = 16              # DRV8825 microstepping (1, 2, 4, 8, 16, or 32)
-TURRET_GEAR_RATIO = 1.0          # >1 means stepper turns more than turret
-                                  # e.g. 3.0 = stepper does 3 revs per 1 turret rev
 
-# Derived: total microsteps for one full TURRET revolution
-STEPS_PER_TURRET_REV = int(STEPPER_STEPS_PER_REV * MICROSTEP_MODE * TURRET_GEAR_RATIO)
+# Derived: total microsteps for one full turret revolution
+STEPS_PER_TURRET_REV = STEPPER_STEPS_PER_REV * MICROSTEP_MODE  # 200 × 16 = 3200
 
 SCAN_STEP_SIZE = 16              # microsteps between ToF readings during scan
 STEP_DELAY_US = 600              # microseconds per pulse (lower = faster)
@@ -74,7 +72,6 @@ LATCH_OPEN = 20                  # degrees — releases arm to fire
 
 ARM_SPEED = 70                   # speed for cocking (0-100, higher = faster pull)
 ARM_RELEASE_SPEED = -50          # speed for returning to rest (negative = reverse)
-ARM_GEAR_RATIO = 1.0             # >1 if geared for more torque
 
 # Timing-based arm positions (milliseconds of spin at ARM_SPEED)
 ARM_COCK_DURATION_MIN = 200      # ms — minimum pull-back (close targets)
