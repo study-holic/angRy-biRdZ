@@ -1,11 +1,4 @@
 # calibrate.py — Interactive calibration mode
-# =============================================
-# Use this to:
-#   1. Test individual components
-#   2. Fire test shots at different power levels
-#   3. Build your calibration table
-#   4. Verify sensor readings
-#
 # Run from REPL:
 #   from calibrate import run
 #   run()
