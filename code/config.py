@@ -76,7 +76,7 @@ TOWER_MAX_WIDTH = 30             # maximum samples — wider = probably a wall
 
 #  CALIBRATION TABLE
 # Format: (arm_cock_duration_ms, resulting_launch_distance_mm)
-# *** FILL THIS IN FROM TEST SHOTS AFTER***
+# FILL THIS IN FROM TEST SHOTS AFTER
 # Use calibration mode: run main.py → option 2
 # Fire test shots at different durations, measure where they land.
 
