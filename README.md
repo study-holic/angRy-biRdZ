@@ -1,6 +1,6 @@
 # Hack-A-Bot Autonomous Catapult
 
-A fully autonomous catapult system built on the Raspberry Pi Pico 2 for the Hack-A-Bot Live competition. The system scans 360° to detect block towers using a laser distance sensor, calculates launch parameters from a calibration table, aims a stepper-driven turret, and fires projectiles with zero human input.
+A fully autonomous catapult I built on the Raspberry Pi Pico 2 for the Hack-A-Bot Live competition. It scans 360° to find block towers using a laser distance sensor, works out launch parameters from a calibration table, aims a stepper-driven turret, and fires with zero human input once it's running.
 
 ## Hardware
 
@@ -9,9 +9,9 @@ A fully autonomous catapult system built on the Raspberry Pi Pico 2 for the Hack
 | Raspberry Pi Pico 2 | Main controller (MicroPython) |
 | VL53L0X V2 ToF sensor | Laser distance measurement (I2C, 0x29) |
 | SSD1306 0.96" OLED | Status display (I2C, 0x3C) |
-| MG90S micro servo | Latch — holds and releases the cocked arm |
-| MG996R 360° servo | Arm — pulls the catapult arm back against rubber bands |
-| NEMA 17 stepper | Turret — rotates the entire catapult to aim at targets |
+| MG90S micro servo | Latch: holds and releases the cocked arm |
+| MG996R 360° servo | Arm: pulls the catapult arm back against rubber bands |
+| NEMA 17 stepper | Turret: rotates the entire catapult to aim at targets |
 | DRV8825 driver | Stepper motor driver with 1/16 microstepping |
 | LM2596S buck converter | Steps 12V down to 5V for logic and servos |
 | 12V 6A PSU | Main power supply |
@@ -35,7 +35,7 @@ A fully autonomous catapult system built on the Raspberry Pi Pico 2 for the Hack
 ## Repository Structure
 
 ```
-├── main.py           Entry point — mode selection + autonomous sequence
+├── main.py           Entry point: mode selection + autonomous sequence
 ├── config.py         All pin assignments, constants, and calibration table
 ├── servo.py          Positional servo + 360° continuous rotation servo classes
 ├── stepper.py        NEMA 17 turret control with trapezoidal acceleration
@@ -133,7 +133,7 @@ Select a mode:
 
 ## Testing Each Module
 
-Every file can be imported and tested independently in the REPL. Work bottom-up — verify hardware layers before running integrated modes.
+Every file can be imported and tested independently in the REPL. I'd recommend working bottom-up: verify the hardware layers before trying the integrated modes.
 
 ### I2C Bus (are devices connected?)
 
@@ -147,7 +147,7 @@ tof.scan_i2c()
 
 ```python
 tof.read()                # single filtered reading (median of 5)
-tof.continuous_print()    # live readout — Ctrl+C to stop
+tof.continuous_print()    # live readout, Ctrl+C to stop
 ```
 
 ### OLED Display
@@ -159,7 +159,7 @@ screen.text("Line 1", "Line 2", "Line 3", "Line 4")
 screen.progress("Loading", 75)
 ```
 
-If the OLED is not connected, all methods still work — they print to serial instead.
+If the OLED isn't connected, everything still works: it just prints to serial instead.
 
 ### Latch Servo (MG90S — positional)
 
@@ -181,7 +181,7 @@ arm.spin(speed=-50, duration_ms=1000)   # spin reverse 1s
 arm.stop()                              # halt
 ```
 
-Speed ranges from -100 (full reverse) to +100 (full forward). Duration controls how far the arm pulls back, which controls launch power.
+Speed ranges from -100 (full reverse) to +100 (full forward). Duration controls how far the arm pulls back, which in turn controls launch power.
 
 ### Stepper Motor (NEMA 17 turret)
 
@@ -196,7 +196,7 @@ turret.home()                # return to 0°
 turret.disable()             # release motor (saves power)
 ```
 
-3200 microsteps = one full revolution (200 native steps × 16 microstepping).
+3200 microsteps make one full revolution (200 native steps × 16 microstepping).
 
 ### Magazine Servo (positional)
 
@@ -204,7 +204,7 @@ turret.disable()             # release motor (saves power)
 from servo import Positional
 mag = Positional(7)          # GP7
 mag.set_angle(90)            # gate closed
-mag.set_angle(45)            # gate open — drops 1 ball
+mag.set_angle(45)            # gate open, drops 1 ball
 mag.set_angle(90)            # gate closed
 ```
 
@@ -247,7 +247,7 @@ gun.emergency_stop()                  # kill all servos immediately
 
 ## Calibration
 
-The calibration table maps arm cock duration (ms) to launch distance (mm). Without real calibration data, every shot misses.
+The calibration table maps arm cock duration (ms) to launch distance (mm). Without real calibration data collected from your own build, every shot will miss.
 
 ### Procedure
 
@@ -260,7 +260,7 @@ cal> testshot 400       # increase duration, repeat 3×
 cal> testshot 400
 cal> testshot 400
 # ... continue for 600, 800, 1000, 1200
-cal> table              # generates the table — copy into config.py
+cal> table              # generates the table, copy into config.py
 ```
 
 The `table` command outputs a ready-to-paste Python list:
@@ -303,23 +303,23 @@ Paste this into `config.py`, save, and reboot.
 
 ## Autonomous Sequence
 
-When mode 1 is selected, the system runs this sequence with zero human input:
+When mode 1 is selected, the system runs through this sequence with zero human input:
 
-1. **Initialise** — all servos to safe positions, enable stepper, check sensor
-2. **Scan** — 360° turret rotation, 200 ToF readings (one every 1.8°)
-3. **Detect** — cluster consecutive close readings into tower positions
-4. **Prioritise** — sort towers: far first (×6), middle (×4), close (×2)
-5. **Engage** (up to 5 shots) — for each tower:
+1. **Initialise**: all servos to safe positions, enable stepper, check sensor
+2. **Scan**: 360° turret rotation, 200 ToF readings, one every 1.8°
+3. **Detect**: cluster consecutive close readings into tower positions
+4. **Prioritise**: sort towers, far first (×6), middle (×4), close (×2)
+5. **Engage** (up to 5 shots), running per tower:
    - Aim turret → re-verify distance → lookup calibration table
    - Reload from magazine → cock arm → countdown beeps → fire
    - Reset arm to rest position
-6. **Finish** — return turret home, disable stepper, display results
+6. **Finish**: return turret home, disable stepper, display results
 
 ---
 
 ## Configuration Reference
 
-All tuneable parameters live in `config.py`. The most commonly adjusted values during a build:
+All tuneable parameters live in `config.py`. The values I found myself adjusting most during the build:
 
 | Parameter | Default | What It Controls |
 |-----------|---------|-----------------|
@@ -330,9 +330,9 @@ All tuneable parameters live in `config.py`. The most commonly adjusted values d
 | `ARM_COCK_DURATION_MIN` | 200 | Shortest cock duration in ms (close targets) |
 | `ARM_COCK_DURATION_MAX` | 1200 | Longest cock duration in ms (far targets) |
 | `MICROSTEP_MODE` | 16 | DRV8825 microstepping (must match M0/M1/M2 wiring) |
-| `BACKGROUND_THRESHOLD` | 2200 | mm — ToF readings above this are ignored during scan |
-| `CLOSE_MAX` | 1050 | mm — towers closer than this are classified "close" |
-| `MIDDLE_MAX` | 1550 | mm — towers closer than this are classified "middle" |
+| `BACKGROUND_THRESHOLD` | 2200 | mm, ToF readings above this are ignored during scan |
+| `CLOSE_MAX` | 1050 | mm, towers closer than this are classified "close" |
+| `MIDDLE_MAX` | 1550 | mm, towers closer than this are classified "middle" |
 | `TOWER_MIN_WIDTH` | 2 | Minimum scan samples to count as a tower (noise filter) |
 | `TOWER_MAX_WIDTH` | 30 | Maximum scan samples (rejects walls) |
 | `CALIBRATION_TABLE` | placeholder | **(must replace with real test data)** |
@@ -364,4 +364,4 @@ All tuneable parameters live in `config.py`. The most commonly adjusted values d
 
 ## License
 
-Built for Hack-A-Bot Live. Inspired by [Arduino Robot Catapult](https://www.instructables.com/Arduino-Robot-Catapult/) by avi_o (used as high-level reference only — different hardware, original code).
+Built for Hack-A-Bot Live. Inspired by [Arduino Robot Catapult](https://www.instructables.com/Arduino-Robot-Catapult/) by avi_o (used as a high-level reference only: different hardware, original code).
